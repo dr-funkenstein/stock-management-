@@ -7,15 +7,16 @@
 
 setMethod("initialize", 'AcquiredCompany', 
   def = function(.Object, path, date, amount,...){
-  .Object = callNextMethod(.Object,...,path)
-  data = .Object@timeseries
-  # Currently the proram does not handle going short directly, 
-  # must first go long
-  .Object@events <- data.frame(Date =date, Amount = amount, Type = 'Buy', 
-    Price = amount * data$Closing.price[data$Date == date], Total = amount,
-    stringsAsFactors=FALSE)
-  return(.Object)
-})
+    .Object = callNextMethod(.Object,...,path)
+    data = .Object@timeseries
+    # Currently the proram does not handle going short directly, 
+    # must first go long
+    .Object@events <- data.frame(Date =date, Amount = amount, Type = 'Buy', 
+      Price = amount * data$Closing.price[data$Date == date], Total = amount,
+      stringsAsFactors=FALSE)
+    return(.Object)
+  }
+)
 
 
 setMethod('invest', 'AcquiredCompany', 

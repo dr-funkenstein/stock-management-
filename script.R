@@ -43,3 +43,38 @@ amount <- rep(c(200,100,50),3)
 dates = rep(c('2014-11-03', '2014-10-17', '2014-01-24'),3)
 
 testInvestor = Investor(files, dates, amount)
+
+print(testInvestor['history'])
+#      Ticks       Date Amount Type  Price Total
+# 1      AAK 2014-11-03    200  Buy  79200   200
+# 2      ABB 2014-10-17    100  Buy  14780   100
+# 3     ALFA 2014-01-24     50  Buy   7830    50
+# 4 ALIV_SDB 2014-11-03    200  Buy 135700   200
+# 5      AOI 2014-10-17    100  Buy   2640   100
+# 6   ASSA_B 2014-01-24     50  Buy  16580    50
+# 7   ATCO_A 2014-11-03    200  Buy  42220   200
+# 8   ATCO_B 2014-10-17    100  Buy  17730   100
+# 9     AXFO 2014-01-24     50  Buy  16175    50
+
+# Now we sell 50 of our stocks in ABB
+testInvestor<-invest(testInvestor,'ABB', '2014-11-03',50, 'Sell')
+# You have 50 Stocks left.
+
+
+print(testInvestor['history'])
+
+#       Ticks       Date Amount Type  Price Total
+# 1       AAK 2014-11-03    200  Buy  79200   200
+# 2       ABB 2014-10-17    100  Buy  14780   100
+# 3      ALFA 2014-01-24     50  Buy   7830    50
+# 4  ALIV_SDB 2014-11-03    200  Buy 135700   200
+# 5       AOI 2014-10-17    100  Buy   2640   100
+# 6    ASSA_B 2014-01-24     50  Buy  16580    50
+# 7    ATCO_A 2014-11-03    200  Buy  42220   200
+# 8    ATCO_B 2014-10-17    100  Buy  17730   100
+# 9      AXFO 2014-01-24     50  Buy  16175    50
+# 10      ABB 2014-11-03     50 Sell  -8035    50
+
+
+# Plotting the stock of ABB
+plot(testInvestor['ABB'],'')

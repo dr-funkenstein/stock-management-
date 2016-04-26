@@ -15,8 +15,9 @@ setMethod('initialize', 'Investor',
 		.Object@misc$ticks <- unname(ticks)
 
 		.Object@history <- data.frame(
+			Ticks = ticks,
 			t(sapply(seq_along(paths), function(i){.Object@companies[[i]]['events']})),
-			row.names = ticks
+			row.names = seq_along(paths)
 		)
 		
 		.Object@current <- data.frame(amount, row.names = ticks)
@@ -67,7 +68,7 @@ setMethod('invest', 'Investor',
 			AcquiredCompany = invest(object[tick], action, amount, date))
 
 		object@history <- rbind(object@history, 
-			tick = tail(object[tick]['events'] ,n=1) )
+			c(Ticks = tick,tail(object[tick]['events'] ,n=1) ))
 
 		object@current[[tick,'amount']] <- object@current[[tick,'amount']] + 
 			ifelse(action=='Buy',amount, - amount )
