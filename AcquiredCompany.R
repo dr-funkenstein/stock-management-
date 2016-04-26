@@ -56,6 +56,7 @@ setMethod('invest', 'AcquiredCompany',
 
 setMethod('show', 'AcquiredCompany',
   def = function(object){
+    # Showing the new information that is added in this layer
     callNextMethod()
     cat('You own ', tail(object@events$Total,n=1), 
       ' Stocks with a current market value of ',  
@@ -67,6 +68,7 @@ setMethod('show', 'AcquiredCompany',
 
 setMethod('[','AcquiredCompany',
   function(x, i, j, drop){
+    # The only new thing that is added since Company is events
     if(i == 'events') return(x@events)
     callNextMethod()
   }

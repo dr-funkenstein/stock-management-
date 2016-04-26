@@ -12,14 +12,18 @@ setMethod('initialize', 'Investor',
 		ticks <- sapply(.Object@companies, function(x) {x@tick})
 		names(.Object@companies) <- ticks
 
+		# Allways good to have easy access to all the companies one own
 		.Object@misc$ticks <- unname(ticks)
 
+		# wanted to have the row names be the tick but all rownames needs to be unique 
 		.Object@history <- data.frame(
 			Ticks = ticks,
 			t(sapply(seq_along(paths), function(i){.Object@companies[[i]]['events']})),
 			row.names = seq_along(paths)
 		)
 		
+		# This is a data.frame storing the current holdings, maybe should
+		# the value of each holding as well. 
 		.Object@current <- data.frame(amount, row.names = ticks)
 
 		return(.Object)
@@ -28,6 +32,7 @@ setMethod('initialize', 'Investor',
 
 setValidity('Investor', 
 	function(object){
+		# More should come...
 		if ( any(! sapply(object@companies, class) == "AcquiredCompany" )){
 			stop("All companies must be of class AcquiredCompany!")
 		}
@@ -53,9 +58,15 @@ setMethod('[', 'Investor',
 
 setReplaceMethod('setCompany', 'Investor', 
 	def = function(object, value){
-	# Value should be a list consisting of a tick and a AcquiredCompany
+		# Value should be a list consisting of a tick and an AcquiredCompany
+
+		# This will change the order of the Companies so that the last bought/sold
+		# will be last, but usually one access them through their tick and not their 
+		# number 
 		temp <-  object[paste('-',value$tick,sep='')]
+
 		temp[[value$tick]] <- value$AcquiredCompany
+
 		object@companies <- temp
 		validObject(object)
 		return(object)
@@ -64,6 +75,9 @@ setReplaceMethod('setCompany', 'Investor',
 
 setMethod('invest', 'Investor',
 	def = function(object, tick, date, amount, action){
+		# Makes a transaction, date need to be a trading day and for now 
+		# it also needs to be before 2014-12-31
+		# action is either 'Sell' or 'Buy'
 		setCompany(object) <- list(tick = tick, 
 			AcquiredCompany = invest(object[tick], action, amount, date))
 
