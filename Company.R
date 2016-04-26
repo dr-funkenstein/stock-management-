@@ -32,7 +32,8 @@ setMethod("initialize", 'Company',
       .Object@timeseries$Closing.price[-.Object@misc$datapoints]
 
     	return(.Object)
-})
+  }
+)
 
 setValidity('Company', 
   function(object){
@@ -41,42 +42,48 @@ setValidity('Company',
     }
   )
 
-setMethod('plot', 'Company', def = function(x,y='',...){
-  # Plots anything from the timeseries against date 
-  if(y == ''){
-    tempDf <- data.frame(x = x@timeseries$Date, y = x@timeseries$Closing.price)
-    ylab = 'Closing Price'
-  } else {
-    tempDf <- data.frame(x = x@timeseries$Date)
-    tempDf$y <- x@timeseries[y]
-    ylab = y
-  }
-  pl = ggplot(tempDf, aes(x=x, y= y)) + geom_line() + labs(x='Date', y = ylab)+ 
-    ggtitle(x@tick)
-  print(pl, newPage =T)
-})
+setMethod('plot', 'Company', 
+  def = function(x,y='',...){
+    # Plots anything from the timeseries against date 
+    if(y == ''){
+      tempDf <- data.frame(x = x@timeseries$Date, y = x@timeseries$Closing.price)
+      ylab = 'Closing Price'
+    } else {
+      tempDf <- data.frame(x = x@timeseries$Date)
+      tempDf$y <- x@timeseries[y]
+      ylab = y
+    }
+    pl = ggplot(tempDf, aes(x=x, y= y)) + geom_line() + labs(x='Date', y = ylab)+ 
+      ggtitle(x@tick)
+    print(pl, newPage =T)
+    }
+)
 
-setMethod('show', 'Company', def = function(object){
-  # To not show everything
-  cat('Information about company ', object@tick, ' ranging from ', 
-    object@timeseries$Date[1] , ' to ', tail(object@timeseries$Date,n=1),'.\n',
-    sep = '')
-  if(tail(object@diffTimeseries$change,n=1) > 0){
-    cat('Last closing price at: ', tail(object@timeseries$Closing.price, n=1),
-      ' which is up ', tail(object@diffTimeseries$change,n=1), ' points since the day before.' ,sep = '')
-  } else {
-    cat('Last closing price at: ', tail(object@timeseries$Closing.price, n=1),
-      ' which is down ', abs(tail(object@diffTimeseries$change,n=1)), ' points since the day before.\n' ,sep = '')
+setMethod('show', 'Company', 
+  def = function(object){
+    # To not show everything
+    cat('Information about company ', object@tick, ' ranging from ', 
+      object@timeseries$Date[1] , ' to ', tail(object@timeseries$Date,n=1),'.\n',
+      sep = '')
+    if(tail(object@diffTimeseries$change,n=1) > 0){
+      cat('Last closing price at: ', tail(object@timeseries$Closing.price, n=1),
+        ' which is up ', tail(object@diffTimeseries$change,n=1), ' points since the day before.' ,sep = '')
+    } else {
+      cat('Last closing price at: ', tail(object@timeseries$Closing.price, n=1),
+        ' which is down ', abs(tail(object@diffTimeseries$change,n=1)), ' points since the day before.\n' ,sep = '')
+    }
   }
-})
+)
 
-setMethod('summary', 'Company', def = function(object){
-  # Shows the latest run of the company, a little more information than show
-  cat('Information about company ', object@tick, ' ranging from ', 
-    object@timeseries$Date[1] , ' to ', tail(object@timeseries$Date,n=1),'.\n',
-    sep = '')
-  print(tail(object@timeseries))
-})
+setMethod('summary', 'Company', 
+  def = function(object){
+    # Shows the latest run of the company, a little more information than show
+    cat('Information about company ', object@tick, ' ranging from ', 
+      object@timeseries$Date[1] , ' to ', tail(object@timeseries$Date,n=1),'.\n',
+      sep = '')
+    print(tail(object@timeseries))
+  }
+)
 
 setMethod("[", 'Company', 
   def = function(x, i, j, drop){
@@ -84,4 +91,5 @@ setMethod("[", 'Company',
     if(i=="timeseries") return(x@timeseries)
     if(i=="diffTimeseries") return(x@diffTimeseries) 
     if(i=="tick") return(x@tick)
-  })
+  }
+)

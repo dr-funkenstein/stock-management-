@@ -51,8 +51,8 @@ setMethod('invest', 'AcquiredCompany',
       stop ('Can only buy or sell stocks')
     }
     return(object)
-
-})
+  }
+)
 
 setMethod('show', 'AcquiredCompany',
   def = function(object){
@@ -62,10 +62,12 @@ setMethod('show', 'AcquiredCompany',
       as.numeric(tail(object@events$Total,n=1)) * 
       tail(object@timeseries$Closing.price,n=1 ), 
       '.\n' ,sep ='')
-  })
+  }
+)
 
 setMethod('[','AcquiredCompany',
   function(x, i, j, drop){
     if(i == 'events') return(x@events)
     callNextMethod()
-  })
+  }
+)
